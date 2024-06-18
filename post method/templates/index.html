@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Pizza</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #2c2c2c;
+            color: #f1f1f1;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-container, .output-container {
+            width: 48%;
+        }
+        h1 {
+            text-align: center;
+            color: #ffa500;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        label {
+            width: 150px;
+            color: #ccc;
+        }
+        input[type="text"], select {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background-color: #444;
+            color: #f1f1f1;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+        .checkbox-group label {
+            margin-bottom: 5px;
+        }
+        button {
+            padding: 10px;
+            background-color: #ffa500;
+            color: #333;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            align-self: center;
+        }
+        button:hover {
+            background-color: #ff8c00;
+        }
+        .confirmation {
+            background-color: #444;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .confirmation h2 {
+            color: #ffa500;
+        }
+        .confirmation p {
+            color: #f1f1f1;
+        }
+        .confirmation img {
+            width: 300px; /* Set the fixed width */
+            height: 300px; /* Set the fixed height */
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        .success-message {
+            color: #28a745;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.5em;
+            background-color: #330;
+            padding: 10px;
+            border-radius: 
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1>Order Your Pizza</h1>
+            <form action="/order" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="pizza_type">Pizza Type:</label>
+                    <input type="text" id="pizza_type" name="pizza_type" required>
+                </div>
+            
+                <div class="form-group">
+                    <label for="size">Size:</label>
+                    <select id="size" name="size" required>
+                        <option value="Small">Small</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Large">Large</option>
+                    </select>
+                </div>
+            
+                <div class="checkbox-group">
+                    <label for="toppings">Toppings:</label>
+                    <label><input type="checkbox" name="toppings" value="Extra Cheese"> Extra Cheese</label>
+                    <label><input type="checkbox" name="toppings" value="Olives"> Olives</label>
+                    <label><input type="checkbox" name="toppings" value="Mushrooms"> Mushrooms</label>
+                </div>
+            
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" name="address" required>
+                </div>
+            
+                <div class="form-group">
+                    <label for="phone">Phone:</label>
+                    <input type="text" id="phone" name="phone" required>
+                </div>
+            
+                <div class="form-group">
+                    <label for="image">Image:</label>
+                    <input type="file" id="image" name="image" accept="image/*" required>
+                </div>
+            
+                <button type="submit">Order Now</button>
+            </form>
+        </div>
+
+        <div class="output-container">
+            {% if response %}
+                <div class="confirmation">
+                    <h2>Order Confirmation</h2>
+                    <p><strong>Pizza Type:</strong> {{ response.pizza_type }}</p>
+                    <p><strong>Size:</strong> {{ response.size }}</p>
+                    <p><strong>Toppings:</strong> {{ response.toppings | join(', ') }}</p>
+                    <p><strong>Address:</strong> {{ response.address }}</p>
+                    <p><strong>Phone:</strong> {{ response.phone }}</p>
+                    <p><strong>Image:</strong></p>
+                    <img src="/static/uploads/{{ response.image_filename }}" alt="Uploaded Image">
+                    <p class="success-message">{{ response.message }}</p>
+                </div>
+            {% elif error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
